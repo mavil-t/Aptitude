@@ -1,0 +1,197 @@
+/////////////////////////////////////////////////////////////////////////////////////
+
+#QUESTION 1
+
+/////////////////////////////////////////////////////////////////////////////////////
+PS:O(n) is the time complexity where n is the size of the input array
+----------------------------------------------------------------------
+public static int Challenge(int[] input)
+        {
+            int max = 0;
+            var inpLen = input.Length;
+            var elementCount = new Dictionary<int, int>();
+            var maxCount = 1;
+            foreach (int num in input)
+            {
+                if (elementCount.ContainsKey(num))
+                {
+                    elementCount[num] += 1;
+                    if (maxCount < elementCount[num])
+                    {
+                        maxCount = elementCount[num];
+                    }
+                }
+                else
+                {
+                    elementCount.Add(num, 1);
+                }
+            }
+
+            int[] occuranceCount = new int[input.Distinct().Count()];
+            maxCount--;
+            int i = 0;
+
+            foreach (var key in elementCount.Keys)
+            {
+                if (elementCount[key] >= maxCount)
+                {
+                    occuranceCount[i++] = key;
+                }
+            }
+
+            
+            var firstNum = input.First(e => occuranceCount.Contains(e));
+            var secondNum = 0;
+            int j ;
+            for (j = Array.IndexOf(input, firstNum)+1; j < inpLen - 1; j++)
+            {
+                if (occuranceCount.Contains(input[j]))
+                {
+                    secondNum = input[j];
+                    var sum = (firstNum + secondNum);
+
+                    if (max < sum)
+                    {
+                        max = sum;
+                    }
+
+                    firstNum = secondNum;
+                }
+            }
+            
+            return max;
+        }
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+#QUESTION 2
+
+////////////////////////////////////////////////////////////////////////////////
+
+public class User
+    {
+        private string _username;
+        private static int _userCount = 0;
+
+        public User()
+        {
+            _userCount++;
+        }
+
+        /// <summary>
+        /// Add username to user
+        /// </summary>
+        /// <param name="username"></param>
+        public void Add(string username)
+        {
+            _username = username;
+        }
+
+        /// <summary>
+        /// Returns count of User class instance
+        /// </summary>
+        /// <returns>user count</returns>
+        public int GetUsersCount()
+        {
+            return _userCount;
+        }
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
+#QUESTION 3
+
+////////////////////////////////////////////////////////////////////////////////
+
+public class Humanoid
+    {
+        private string _skill = string.Empty;
+
+        public Humanoid()
+        {
+            _skill = string.Empty;
+        }
+
+        public Humanoid(Dancing canDance)
+        {
+            if (!_skill.Contains("dancing"))
+            {
+                _skill = string.Concat(_skill, "dancing");
+            }
+        }
+
+
+        public Humanoid(Cooking canCook)
+        {
+            if (!_skill.Contains("cooking"))
+            {
+                _skill = string.Concat(_skill, "cooking");
+            }
+        }
+
+        public string ShowSkill()
+        {
+            return string.IsNullOrEmpty(_skill) ? "no skill is defined" : _skill;
+        }
+    }
+
+    public class Dancing
+    {
+
+    }
+
+    public class Cooking
+    {
+
+    }
+/////////////////////////////////////////////////////////////////////////////////
+
+#QUESTION 4
+
+/////////////////////////////////////////////////////////////////////////////////
+
+public class Alexa
+{
+    public string GreetingMessage { get; set; }
+    public string OwnerName { get; set; }
+
+    public Alexa()
+    {
+        this.GreetingMessage = "hello, i am Alexa";
+        this.OwnerName = string.Empty;
+    }
+
+    public string Talk()
+    {
+        return GreetingMessage;
+    }
+
+    public void Configure(Action<Alexa> setting)
+    {
+        setting.Invoke(this);
+
+        if (GreetingMessage.Contains("{") && GreetingMessage.Contains("}"))
+        {
+            var tempStr = GreetingMessage.Split('{');
+
+            if (tempStr[1].Split('}')[0] == "OwnerName")
+            {
+                GreetingMessage = tempStr[0] + this.OwnerName + tempStr[1].Split('}')[1];
+            }
+        }
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+#QUESTION 5
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+public static Task<(double, long)> SomeCalculation(long a, long b, bool c)
+{
+    var r = (double)a / b;
+
+    return Task.FromResult((r, b));
+}
